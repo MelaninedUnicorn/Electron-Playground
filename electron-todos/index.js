@@ -8,6 +8,8 @@ let addWindow;
 app.on("ready", () => {
 	mainWindow = new BrowserWindow({});
 	mainWindow.loadURL(`file://${__dirname}/main.html`);
+mainWindow.on('closed', ()=> app.quit());
+
 
 	const mainMenu = Menu.buildFromTemplate(menuTemplate);
 
@@ -20,6 +22,8 @@ function createAddWindow() {
 		height: 200,
 		title: "Add New Todo",
 	});
+
+    addWindow.loadURL(`file://${__dirname}/add.html`)
 }
 const menuTemplate = [
 	{
