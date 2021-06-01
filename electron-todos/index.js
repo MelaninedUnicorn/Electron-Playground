@@ -6,10 +6,9 @@ let mainWindow;
 let addWindow;
 
 app.on("ready", () => {
-	mainWindow = new BrowserWindow({});
+	mainWindow = new BrowserWindow({ webPreferences: { nodeIntegration: true, contextIsolation: false}});
 	mainWindow.loadURL(`file://${__dirname}/main.html`);
-mainWindow.on('closed', ()=> app.quit());
-
+	mainWindow.on("closed", () => app.quit());
 
 	const mainMenu = Menu.buildFromTemplate(menuTemplate);
 
@@ -21,9 +20,10 @@ function createAddWindow() {
 		width: 300,
 		height: 200,
 		title: "Add New Todo",
+        webPreferences: { nodeIntegration: true, contextIsolation: false}
 	});
 
-    addWindow.loadURL(`file://${__dirname}/add.html`)
+	addWindow.loadURL(`file://${__dirname}/add.html`);
 }
 const menuTemplate = [
 	{
@@ -49,4 +49,21 @@ const menuTemplate = [
 
 if (process.platform === "darwin") {
 	menuTemplate.unshift({});
+}
+
+// NODE_ENV can either be 'production' 'development' 'staging' 'test'
+if (process.env.NODE_ENV !== "production") {
+	menuTemplate.push({
+		label: "Developer",
+		submenu: [
+			{
+				label: "Toggle Developer Tools",
+				accelerator:
+					process.platform === "darwin" ? "Command+Alt+I" : "Ctrl+Shift+I",
+				click(item, focusedWindow) {
+					focusedWindow.toggleDevTools();
+				},
+			},
+		],
+	});
 }
