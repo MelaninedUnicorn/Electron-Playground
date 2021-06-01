@@ -1,3 +1,4 @@
+const { ipcMain } = require("electron");
 const electron = require("electron");
 
 const { app, BrowserWindow, Menu } = electron;
@@ -25,6 +26,11 @@ function createAddWindow() {
 
 	addWindow.loadURL(`file://${__dirname}/add.html`);
 }
+
+ipcMain.on("todo:add", (event,todo) => {
+mainWindow.webContents.send('todo:add',todo);
+})
+
 const menuTemplate = [
 	{
 		label: "File",
