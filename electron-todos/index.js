@@ -7,7 +7,9 @@ let mainWindow;
 let addWindow;
 
 app.on("ready", () => {
-	mainWindow = new BrowserWindow({ webPreferences: { nodeIntegration: true, contextIsolation: false}});
+	mainWindow = new BrowserWindow({
+		webPreferences: { nodeIntegration: true, contextIsolation: false },
+	});
 	mainWindow.loadURL(`file://${__dirname}/main.html`);
 	mainWindow.on("closed", () => app.quit());
 
@@ -21,15 +23,17 @@ function createAddWindow() {
 		width: 300,
 		height: 200,
 		title: "Add New Todo",
-        webPreferences: { nodeIntegration: true, contextIsolation: false}
+		webPreferences: { nodeIntegration: true, contextIsolation: false },
 	});
 
 	addWindow.loadURL(`file://${__dirname}/add.html`);
+	addWindow.on("closed", () => (addWindow = null));
 }
 
-ipcMain.on("todo:add", (event,todo) => {
-mainWindow.webContents.send('todo:add',todo);
-})
+ipcMain.on("todo:add", (event, todo) => {
+	mainWindow.webContents.send("todo:add", todo);
+	addWindow.close();
+});
 
 const menuTemplate = [
 	{
@@ -62,6 +66,7 @@ if (process.env.NODE_ENV !== "production") {
 	menuTemplate.push({
 		label: "Developer",
 		submenu: [
+            {role:'reload'},
 			{
 				label: "Toggle Developer Tools",
 				accelerator:
@@ -70,6 +75,9 @@ if (process.env.NODE_ENV !== "production") {
 					focusedWindow.toggleDevTools();
 				},
 			},
+            
 		],
 	});
+
+    
 }
