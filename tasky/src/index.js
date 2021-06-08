@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import { HashRouter as Router, Route } from "react-router-dom";
+import { Route, HashRouter as Router } from "react-router-dom";
 
 import App from "./components/App";
+import ReactDOM from "react-dom";
 
 ReactDOM.render(
   <Router>
